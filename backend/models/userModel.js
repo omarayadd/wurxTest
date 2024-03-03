@@ -13,22 +13,22 @@ const workingHoursSchema = new mongoose.Schema({
 const userSchema = mongoose.Schema({
     name:{
         type: String,
-        required:[true, 'Please add your name'],
+       // required:[true, 'Please add your name'],
         minlength: 2, 
         maxlength: 50 
     },
     phone:{
         type: [String],
-        required:[true, 'Please add phone number']
+       // required:[true, 'Please add phone number']
     },
     email:{
         type: String,
-        required: [true, 'Please add email'],
+       // required: [true, 'Please add email'],
         unique: true
     },
     position:{
         type: String,
-        required:[true, 'Please add a position']
+       // required:[true, 'Please add a position']
     },
     companyName:{
         type: String,
@@ -43,21 +43,6 @@ const userSchema = mongoose.Schema({
           message: props => `${props.value} is not a valid URL!`
         },
       },
-      image:
-      {
-          data: Buffer,
-          contentType: String
-      },
-    // image:{
-    //     type:String,
-    //     validate: {
-    //         validator: function(value) {
-    //           // Regular expression to validate image URL
-    //           return /\.(jpg|jpeg|png|gif)$/i.test(value);
-    //         },
-    //         message: props => `${props.value} is not a valid image URL!`
-    //       }
-    // },
     workingHours: {
         type: workingHoursSchema,
         //default:""

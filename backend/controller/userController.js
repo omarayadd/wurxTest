@@ -1,7 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const User = require('../models/userModel')
 
-
 //@desc Get Users
 // @route Get api/users
 // @access Private
@@ -18,19 +17,20 @@ const getUser = asyncHandler(async(req, res)=>{
 //@desc Set User
 // @route Post api/users
 // @access public
-const setUser = asyncHandler(async(req, res)=>{
-    if(!req.body.name || !req.body.position || !req.body.email || !req.body.phone){
-        res.status(400)
-        throw new Error("Please fill the missing data")
+const setUser = asyncHandler(async (req, res) => {
+if (!req.body.name  || !req.body.email || !req.body.phone || !req.body.position) {
+        res.status(400);
+        throw new Error("Please fill the missing data");
     }
-     const userData = {
+
+
+    const userData = {
         name: req.body.name,
         phone: req.body.phone,
         email: req.body.email,
         position: req.body.position,
         companyName: req.body.companyName,
         website: req.body.website,
-        image: req.body.image,
         workingHours: {
             start: req.body.start,
             end: req.body.end
@@ -41,10 +41,10 @@ const setUser = asyncHandler(async(req, res)=>{
         xTwitter: req.body.xTwitter,
         linkedIn: req.body.linkedIn
     };
-
     const user = await User.create(userData);
     res.status(200).json(user);
-})
+});
+
 
 //@desc update User
 // @route Put api/users
@@ -52,12 +52,22 @@ const setUser = asyncHandler(async(req, res)=>{
 const updateUser = asyncHandler(async(req, res)=>{
     const user = await User.findById(req.params.id)
     if(!user){
-        res.status(400)
+        res.status(404)
         throw new Error('User not found')
     }
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {new:true,})
+    
+    const updateFields = {};
+    for (const [key, value] of Object.entries(req.body)) {
+        if (value !== undefined) {
+            updateFields[key] = value;
+        }
+    }
+    
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, updateFields, {new:true})
+    
     res.status(200).json(updatedUser)
 })
+
 module.exports ={
     getUser,
     setUser,
