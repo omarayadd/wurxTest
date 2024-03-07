@@ -69,6 +69,29 @@ app.get('/', (req, res)=>{
     res.render('upload')
 })
 
+
+app.get('/files', (req, res)=>{
+    gfs.files.find().toArray((err, files)=>{
+        if(!files||files.length===0){
+            return res.status(404).json({
+                err:"no files exist"
+            })
+        }
+        return res.json(files)
+    })
+})
+
+app.get('/files/:filename', (req, res)=>{
+    gfs.files.findOne({filename:req.params.filename}, (err, file)=>{
+        if(!file||file.length===0){
+            return res.status(404).json({
+                err:"no file exist"
+            })
+        }
+        return res.json(file)
+    })
+})
+
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 
