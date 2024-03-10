@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { getUser, setUser, updateUser } = require('../controller/userController');
-const upload =  require('../server');
+const { getUser, setUser, updateUser} = require('../controller/userController');
+const {upload} =  require('../server');
 
 
 

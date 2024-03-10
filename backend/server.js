@@ -14,33 +14,32 @@ const connectDB = require('./config/db')
 const cors = require('cors');
 
 
-const port = process.env.port || 8000
+
 const app = express()
 
 app.use(cors())
 
 connectDB() 
 
-//Middleware
-app.use(bodyParser.json());
-app.use(methodOverride("_method"))  
-// Set the views directory to include the 'backend' folder
-// Set the views directory
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-
 // create mongo connection
 const conn = mongoose.createConnection(process.env.MONGO_URI)
 let gfs;
 
 conn.once('open', ()=>{
-    //initialize stream
     gfs = Grid(conn.db, mongoose.mongo)
     gfs.collection('uploads')
+    console.log(gfs.files.find().toArray())
 })
 
-//create storage engine
+
+app.use(bodyParser.json());
+app.use(methodOverride("_method"))  
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+
+
+
 const storage = new GridFsStorage({
     url: process.env.MONGO_URI,
     file: (req, file)=>{
@@ -62,7 +61,7 @@ const storage = new GridFsStorage({
 
 const upload = multer({storage})
 
-module.exports = upload;
+module.exports = { upload, gfs, app }; 
 
 
 app.get('/', (req, res)=>{
@@ -71,6 +70,7 @@ app.get('/', (req, res)=>{
 
 
 app.get('/files', (req, res)=>{
+    console.log(gfs.files.find().toArray())
     gfs.files.find().toArray((err, files)=>{
         if(!files||files.length===0){
             return res.status(404).json({
@@ -81,17 +81,7 @@ app.get('/files', (req, res)=>{
     })
 })
 
-app.get('/files/:filename', (req, res)=>{
-    gfs.files.findOne({filename:req.params.filename}, (err, file)=>{
-        if(!file||file.length===0){
-            return res.status(404).json({
-                err:"no file exist"
-            })
-        }
-        return res.json(file)
-    })
-})
-
+const port = process.env.port || 8000
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 

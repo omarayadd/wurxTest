@@ -13,22 +13,22 @@ const workingHoursSchema = new mongoose.Schema({
 const userSchema = mongoose.Schema({
     name:{
         type: String,
-       // required:[true, 'Please add your name'],
+       required:[true, 'Please add your name'],
         minlength: 2, 
         maxlength: 50 
     },
     phone:{
         type: [String],
-       // required:[true, 'Please add phone number']
+       required:[true, 'Please add phone number']
     },
     email:{
         type: String,
-       // required: [true, 'Please add email'],
+       required: [true, 'Please add email'],
         unique: true
     },
     position:{
         type: String,
-       // required:[true, 'Please add a position']
+       required:[true, 'Please add a position']
     },
     companyName:{
         type: String,
@@ -45,7 +45,6 @@ const userSchema = mongoose.Schema({
       },
     workingHours: {
         type: workingHoursSchema,
-        //default:""
       },
      
     languages: {
@@ -89,6 +88,10 @@ const userSchema = mongoose.Schema({
             },
             message: props => `${props.value} is not a valid URL!`
           },
+    },
+    profileImage: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'uploads.files'
     },
 
 },{
