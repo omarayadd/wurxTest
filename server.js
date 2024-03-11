@@ -9,8 +9,8 @@ const { GridFsStorage } = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream')
 const methodOverride = require('method-override')
 const mongoose = require('mongoose');
-const{errorHandler} = require("./middleware/errorMiddleware")
-const connectDB = require('./config/db')
+const{errorHandler} = require("./backend/middleware/errorMiddleware")
+const connectDB = require('./backend/config/db')
 const cors = require('cors');
 
 
@@ -34,7 +34,7 @@ conn.once('open', ()=>{
 
 app.use(bodyParser.json());
 app.use(methodOverride("_method"))  
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'backend/views'));
 app.set('view engine', 'ejs');
 
 
@@ -86,7 +86,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 
 
-app.use('/api/users', require('./routes/userRoutes'))
+app.use('/api/users', require('./backend/routes/userRoutes'))
 
 app.use(errorHandler)
 

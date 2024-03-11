@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../models/userModel');
-const gfs  = require('../server');
+const gfs  = require('../../server');
 
 
 const getUser = asyncHandler(async (req, res) => {
